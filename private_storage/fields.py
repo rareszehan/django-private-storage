@@ -62,6 +62,8 @@ class PrivateFileField(models.FileField):
         return data
 
     def generate_filename(self, instance, filename):
+        if callable(self.upload_to):
+            return self.upload_to(instance, filename)
         subdir_func = self._upload
         if subdir_func:
             subdirs = [self.storage.get_valid_name(dir) for dir in subdir_func(instance)]
